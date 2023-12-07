@@ -1,5 +1,5 @@
 import '../css/style.css'
-const URL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetAllManufacturers?format=json`;
+const URL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/bmw?format=json`;
 async function getData(URL){
   try {
     const response = await fetch(URL);
