@@ -6,6 +6,7 @@ async function getData(URL) {
     const data = await response.json();
     const japanFilter = data.Results.filter((Manufacturer) => Manufacturer.Country === 'JAPAN');
     printHTML(japanFilter);
+    console.log(data)
     console.log(japanFilter);
   } catch (error) {
   }
@@ -30,7 +31,8 @@ async function carData(URL) {
   try {
     const response = await fetch(URL);
     const data = await response.json();
-    const seriesFilter = data.Results.filter((Manufacturer) => Manufacturer.Model_Name.includes("330"))
+    const seriesFilter = data.Results.filter((Manufacturer) => Manufacturer.Model_Name.includes("330"));
+    console.log(data);
     console.log(seriesFilter);
   } catch (error) {
   }
