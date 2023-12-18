@@ -83,6 +83,7 @@ function printHTML(data) {
     `
     const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manufacturer.Mfr_CommonName.toLowerCase()}?format=json`;
     appEl.insertAdjacentHTML("beforeend", HTML);
+    console.log(makesURL);
   });
 };
 const countrySort = document.getElementById('countryButton');
