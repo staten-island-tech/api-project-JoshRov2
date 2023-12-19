@@ -83,18 +83,22 @@ function printHTML(data) {
   <button id="detailsButton">View Details</button>
   <button id="modelsButton">View Models</button>
     `
+    appEl.insertAdjacentHTML("beforeend", HTML);    
     const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manufacturer.Mfr_CommonName.toLowerCase()}?format=json`;
-    const carModels = getData(makesURL);
-    
-
-    appEl.insertAdjacentHTML("beforeend", HTML);
     console.log(makesURL);
-  });
-};
+    modelsButton.addEventListener("click", () =>{
+      appEl.textContent = "";
+      const makeHTML = `
+      <h1>${makesURL.Make_Name}</h1>
+      <h2>${makesURL.Results}</h2>
+      `
+      appEl.insertAdjacentHTML("beforeend", makeHTML);
+    }); 
+  })};
 const countrySort = document.getElementById('countryButton');
 const countryInput = document.getElementById('countryPrompt');
 countrySort.addEventListener("click",() =>{
-  const country = countryInput.value.trim();
+  const country = countryInput.value;
   if(!country){
     return false;
   }
@@ -102,4 +106,4 @@ countrySort.addEventListener("click",() =>{
   printHTML(countryManufacturers);
 })
 const manufacturers = await getData(manufacturerURL);
-const modelSeries = filterData(carModels, (model) => model.Model_Name.includes('50i'));
+const carModels = await getData(makesURL);
