@@ -98,3 +98,9 @@ button:focus-visible {
 input.error {
   border-color: red;
 }
+.h1{
+text-align: center;
+}
+.countryPrompt, .countryButton{
+  text-align: center;
+}

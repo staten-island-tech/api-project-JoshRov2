@@ -78,8 +78,8 @@ function printHTML(data) {
   data.forEach((manufacturer) => {  
     const vehicleTypes = manufacturer.VehicleTypes.map((vehicleType) => vehicleType.Name);
     const HTML = `
-  <h1>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h1>
-  <h2>${vehicleTypes.join(', ')}</h2>
+  <h2>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h2>
+  <h3>${vehicleTypes.join(', ')}</h3>
   <button id="detailsButton">View Details</button>
   <button id="modelsButton">View Models</button>
     `
@@ -89,8 +89,8 @@ function printHTML(data) {
     modelsButton.addEventListener("click", () =>{
       appEl.textContent = "";
       const makeHTML = `
-      <h1>${makesURL.Make_Name}</h1>
-      <h2>${makesURL.Results}</h2>
+      <h2>${makesURL.Make_Name}</h2>
+      <h3>${makesURL.Results}</h3>
       `
       appEl.insertAdjacentHTML("beforeend", makeHTML);
     }); 
