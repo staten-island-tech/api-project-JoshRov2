@@ -62,6 +62,7 @@ async function getData(URL) {
   try {
     const response = await fetch(URL);
     const data = await response.json();
+    console.log(data);
     return data.Results;
   } catch (error) {
     console.error(error);
@@ -72,6 +73,20 @@ function filterData(results, cb) {
   const filteredData = results.filter(cb)
   return filteredData;
 };
+
+function standardHTML(data){
+  appEl.textContent = "";
+  data.forEach((manufacturer) => {
+    const HTML = `
+    <h2>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h2>
+    <h3>${vehicleTypes.join(', ')}</h3>
+    <button id="detailsButton">View Details</button>
+    <button id="modelsButton">View Models</button>
+    `
+    appEl.insertAdjacentHTML("beforeend", HTML)
+  })
+}
+standardHTML();
 
 function printHTML(data) {
   appEl.textContent = "";
@@ -106,4 +121,4 @@ countrySort.addEventListener("click",() =>{
   printHTML(countryManufacturers);
 })
 const manufacturers = await getData(manufacturerURL);
-const carModels = await getData(makesURL);
+// const carModels = await getData(makesURL);
