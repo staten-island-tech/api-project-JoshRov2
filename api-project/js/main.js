@@ -54,6 +54,7 @@ async function carData(URL) {
 carData(MakesURL);
 const maketext = document.getElementById('app');
  */
+// import '../css/style.css'
 
 const manufacturerURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetAllManufacturers?format=json`;
 const appEl = document.getElementById('app');
@@ -74,46 +75,50 @@ function filterData(results, cb) {
   return filteredData;
 };
 
-function standardHTML(data){
-  appEl.textContent = "";
-  data.forEach((manufacturer) => {
-    const HTML = `
-    <h2>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h2>
-    <h3>${vehicleTypes.join(', ')}</h3>
-    <button id="detailsButton">View Details</button>
-    <button id="modelsButton">View Models</button>
-    `
-    appEl.insertAdjacentHTML("beforeend", HTML)
-  })
-}
-standardHTML();
-
 function printHTML(data) {
   appEl.textContent = "";
   data.forEach((manufacturer) => {  
+    let nameTest = manufacturer.Mfr_Name;
+    if (manufacturer.Mfr_CommonName !== null){
+      nameTest = manufacturer.Mfr_CommonName
+    }
+    nameTest = nameTest.toLowerCase().split(" ").join('%20')
     const vehicleTypes = manufacturer.VehicleTypes.map((vehicleType) => vehicleType.Name);
     const HTML = `
+    <div data-manufacturer=${nameTest}>
   <h2>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h2>
   <h3>${vehicleTypes.join(', ')}</h3>
-  <button id="detailsButton">View Details</button>
-  <button id="modelsButton">View Models</button>
+  <button class="detailsButton">View Details</button>
+  <button class="modelsButton">View Models</button>
+    </div>
     `
-    appEl.insertAdjacentHTML("beforeend", HTML);    
-    const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manufacturer.Mfr_CommonName.toLowerCase()}?format=json`;
+    appEl.insertAdjacentHTML("beforeend", HTML);   
+    
+    const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${nameTest}?format=json`;
     console.log(makesURL);
-    modelsButton.addEventListener("click", () =>{
+     /* modelsButton.addEventListener("click", () =>{
       appEl.textContent = "";
       const makeHTML = `
-      <h2>${makesURL.Make_Name}</h2>
-      <h3>${makesURL.Results}</h3>
-      `
-      appEl.insertAdjacentHTML("beforeend", makeHTML);
-    }); 
+       <h2>${makesURL.Make_Name}</h2>
+       <h3>${makesURL.Results}</h3>
+       `
+    appEl.insertAdjacentHTML("beforeend", makeHTML);
+    });  */
   })};
+  appEl.addEventListener("click", async(event) => {
+    if(event.target.matches(".modelsButton")){
+      console.log('clicked', event.target)
+      const manufacturer = (event.target.closest("div").dataset.manufacturer)
+      const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manufacturer}?format=json`;
+      const response = await fetch(makesURL)
+      const data = await response.json();
+      console.log(data)
+    }
+  })
 const countrySort = document.getElementById('countryButton');
 const countryInput = document.getElementById('countryPrompt');
 countrySort.addEventListener("click",() =>{
-  const country = countryInput.value;
+  const country = countryInput.value.trim();
   if(!country){
     return false;
   }
@@ -121,4 +126,3 @@ countrySort.addEventListener("click",() =>{
   printHTML(countryManufacturers);
 })
 const manufacturers = await getData(manufacturerURL);
-// const carModels = await getData(makesURL);
