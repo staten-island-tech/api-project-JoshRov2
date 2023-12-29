@@ -105,6 +105,18 @@ function printHTML(data) {
     appEl.insertAdjacentHTML("beforeend", makeHTML);
     });  */
   })};
+
+  function modelHTML(data){
+    appEl.textContent = "";
+    data.forEach((model) => {
+      const HTML = `
+      <h2>${model.Make_Name}</h2>
+      <h3>${model.Model_Name}</h3>
+      `
+    appEl.insertAdjacentHTML('beforeend', HTML)
+    }
+  )}
+
   appEl.addEventListener("click", async(event) => {
     if(event.target.matches(".modelsButton")){
       console.log('clicked', event.target)
@@ -112,9 +124,20 @@ function printHTML(data) {
       const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manufacturer}?format=json`;
       const response = await fetch(makesURL)
       const data = await response.json();
-      console.log(data)
+      console.log(data);
+      function displayModelsHTML(Results) {
+        appEl.textContent = "";
+        Results.forEach((car) => {
+          const HTML = `
+          <h2>${car.Make_Name}</h2>
+          <h3>${car.Model_Name}</h3>
+          `;
+        appEl.insertAdjacentHTML('beforeend', HTML)
+      });
+      }
+      displayModelsHTML(data);
     }
-  })
+  });
 const countrySort = document.getElementById('countryButton');
 const countryInput = document.getElementById('countryPrompt');
 countrySort.addEventListener("click",() =>{
