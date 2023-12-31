@@ -96,6 +96,8 @@ function printHTML(data) {
     
     const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${nameTest}?format=json`;
     console.log(makesURL);
+    const detailsURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetManufacturerDetails/${nameTest}?format=json`;
+    console.log(detailsURL);
      /* modelsButton.addEventListener("click", () =>{
       appEl.textContent = "";
       const makeHTML = `
@@ -106,16 +108,42 @@ function printHTML(data) {
     });  */
   })};
 
-  function modelHTML(data){
+  function displayModelsHTML(Results) {
     appEl.textContent = "";
-    data.forEach((model) => {
+    Results.forEach((car) => {
       const HTML = `
-      <h2>${model.Make_Name}</h2>
-      <h3>${model.Model_Name}</h3>
-      `
-    appEl.insertAdjacentHTML('beforeend', HTML)
-    }
-  )}
+      <h2>${car.Make_Name}</h2>
+      <h3>${car.Model_Name}</h3>
+      `;
+    appEl.insertAdjacentHTML("beforeend", HTML)
+  });
+  }
+
+  function displayDetailsHTML(Results) {
+    appEl.textContent = "";
+    Results.forEach(({Mfr_Name, Mfr_CommonName, Country, City, StateProvince, Address}) => {
+  const manufacturerHTML = `
+  <div class="manu-card">
+  <h3>${Mfr_Name}</h3>
+  ${Mfr_CommonName ? `<h4>${Mfr_CommonName}</h4>` : ''}
+  <p>Country: ${Country}</p>
+  <p>City: ${City}</p>
+  <p>State/Province: ${StateProvince}
+  <p>Address: ${Address}</p>
+  </div>`
+  /* const manufacturerHTML = `
+  <div class="manu-card">
+  <h3>${car.Mfr_Name}</h3>
+  ${car.Mfr_CommonName ? `<h4>${car.Mfr_CommonName}</h4>` : ''}
+  <p>Country: ${car.Country}</p>
+  <p>City: ${car.City}</p>
+  <p>State/Province: ${car.StateProvince}
+  <p>Address: ${car.Address}</p>
+  </div>` */
+  appEl.insertAdjacentHTML('beforeend', manufacturerHTML);
+  });
+  }
+
 
   appEl.addEventListener("click", async(event) => {
     if(event.target.matches(".modelsButton")){
@@ -125,19 +153,19 @@ function printHTML(data) {
       const response = await fetch(makesURL)
       const data = await response.json();
       console.log(data);
-      function displayModelsHTML(Results) {
-        appEl.textContent = "";
-        Results.forEach((car) => {
-          const HTML = `
-          <h2>${car.Make_Name}</h2>
-          <h3>${car.Model_Name}</h3>
-          `;
-        appEl.insertAdjacentHTML('beforeend', HTML)
-      });
-      }
-      displayModelsHTML(data);
+      displayModelsHTML(data.Results);
+    }
+    if(event.target.matches(".detailsButton")){
+      const manufacturer = (event.target.closest("div").dataset.manufacturer)
+      const detailsURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetManufacturerDetails/${manufacturer}?format=json`;
+      const response = await fetch(detailsURL)
+      const data = await response.json();
+      console.log(data);
+      displayDetailsHTML(data.Results);
     }
   });
+
+  
 const countrySort = document.getElementById('countryButton');
 const countryInput = document.getElementById('countryPrompt');
 countrySort.addEventListener("click",() =>{
