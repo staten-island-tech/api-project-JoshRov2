@@ -121,15 +121,18 @@ function printHTML(data) {
 
   function displayDetailsHTML(Results) {
     appEl.textContent = "";
-    Results.forEach(({Mfr_Name, Mfr_CommonName, Country, City, StateProvince, Address}) => {
+    Results.forEach(({Mfr_Name, Mfr_CommonName, Country, City, StateProvince, Address, ContactEmail, PrincipalFirstName, PrincipalPosition}) => {
   const manufacturerHTML = `
   <div class="manu-card">
   <h3>${Mfr_Name}</h3>
-  ${Mfr_CommonName ? `<h4>${Mfr_CommonName}</h4>` : ''}
+  <h4>${Mfr_CommonName}</h4>
   <p>Country: ${Country}</p>
   <p>City: ${City}</p>
   <p>State/Province: ${StateProvince}
   <p>Address: ${Address}</p>
+  <p>Contact Email: ${ContactEmail}</p>
+  <p>Primary Operator: ${PrincipalFirstName}</p>
+  <p>Operator Position: ${PrincipalPosition}</p>
   </div>`
   /* const manufacturerHTML = `
   <div class="manu-card">
