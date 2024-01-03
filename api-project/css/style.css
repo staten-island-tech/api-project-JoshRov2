@@ -99,9 +99,14 @@ input.error {
   border-color: red;
 }
 .h1{
-text-align: center;
-justify-content: flex-start;
+  text-align: start;
+  justify-content: center;
 }
 .countryPrompt, .countryButton{
   text-align: center;
+}
+
+HTML{
+  background-color: wheat;
+  border: 2px solid black;
 }

@@ -54,7 +54,7 @@ async function carData(URL) {
 carData(MakesURL);
 const maketext = document.getElementById('app');
  */
-// import '../css/style.css'
+//import '../css/style.css'
 
 const manufacturerURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetAllManufacturers?format=json`;
 const appEl = document.getElementById('app');
@@ -171,6 +171,8 @@ function printHTML(data) {
   
 const countrySort = document.getElementById('countryButton');
 const countryInput = document.getElementById('countryPrompt');
+const manuText = document.getElementById('manuButton');
+const manuInput = document.getElementById('manuPrompt');
 countrySort.addEventListener("click",() =>{
   const country = countryInput.value.trim();
   if(!country){
@@ -180,3 +182,11 @@ countrySort.addEventListener("click",() =>{
   printHTML(countryManufacturers);
 })
 const manufacturers = await getData(manufacturerURL);
+manuText.addEventListener("click",() =>{
+  const manu = manuInput.value.trim();
+  if(!manu){
+    return false;
+  }
+  const pageSet = filterData(manufacturers, (manufacturer) => manufacturer.Mfr_CommonName.includes === manu.textContent);
+  printHTML(pageSet);
+})
