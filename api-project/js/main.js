@@ -195,7 +195,7 @@ const manufacturers = await getData(manufacturerURL);
     const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manuInput}?format=json`;
     const response = fetch(makesURL)
     const data = response.json();
-    if{
+    if(data){
       response
     }
 
