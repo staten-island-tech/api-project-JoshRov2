@@ -78,12 +78,21 @@ function filterData(results, cb) {
 function printHTML(data) {
   appEl.textContent = "";
   data.forEach((manufacturer) => {  
-    let nameTest = manufacturer.Mfr_Name;
+    let nameTest = manufacturer.Mfr_Name;    
+    const vehicleTypes = manufacturer.VehicleTypes.map((vehicleType) => vehicleType.Name);
     if (manufacturer.Mfr_CommonName !== null){
       nameTest = manufacturer.Mfr_CommonName
+      const HTML = `
+      <div data-manufacturer=${nameTest}>
+    <h2>${manufacturer.Mfr_Name}</h2>
+    <h3>${vehicleTypes.join(', ')}</h3>
+    <button class="detailsButton">View Details</button>
+    <button class="modelsButton">View Models</button>
+      </div>
+      `
+    appEl.insertAdjacentHTML("beforeend", HTML)
     }
     nameTest = nameTest.toLowerCase().split(" ").join('%20')
-    const vehicleTypes = manufacturer.VehicleTypes.map((vehicleType) => vehicleType.Name);
     const HTML = `
     <div data-manufacturer=${nameTest}>
   <h2>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h2>
@@ -167,7 +176,6 @@ function printHTML(data) {
       displayDetailsHTML(data.Results);
     }
   });
-
   
 const countrySort = document.getElementById('countryButton');
 const countryInput = document.getElementById('countryPrompt');
@@ -182,11 +190,13 @@ countrySort.addEventListener("click",() =>{
   printHTML(countryManufacturers);
 })
 const manufacturers = await getData(manufacturerURL);
-manuText.addEventListener("click",() =>{
-  const manu = manuInput.value.trim();
-  if(!manu){
-    return false;
-  }
-  const pageSet = filterData(manufacturers, (manufacturer) => manufacturer.Mfr_CommonName.includes === manu.textContent);
-  printHTML(pageSet);
+
+  manuText.addEventListener("click",() =>{
+    const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manuInput}?format=json`;
+    const response = fetch(makesURL)
+    const data = response.json();
+    if{
+      response
+    }
+
 })
