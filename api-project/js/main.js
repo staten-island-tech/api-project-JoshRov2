@@ -75,27 +75,25 @@ function filterData(results, cb) {
   return filteredData;
 };
 
-function printHTML(data) {
+function printHTML(data, countryName) {
   appEl.textContent = "";
+  const headerHTML = `
+  <div class="notification">
+  <h2>Manufacturers based in ${countryName}</h2>
+  <h2>This search parameter will display companies and/or subsidaries that may contain more than one manufacturer. As a result, not every car maker is available here, but specific manufacturers can be found in the model input.</h2>
+  </div>
+  `
+  appEl.insertAdjacentHTML("beforeend", headerHTML)
   data.forEach((manufacturer) => {  
     let nameTest = manufacturer.Mfr_Name;    
     const vehicleTypes = manufacturer.VehicleTypes.map((vehicleType) => vehicleType.Name);
     if (manufacturer.Mfr_CommonName !== null){
       nameTest = manufacturer.Mfr_CommonName
-      const HTML = `
-      <div data-manufacturer=${nameTest}>
-    <h2>${manufacturer.Mfr_Name}</h2>
-    <h3>${vehicleTypes.join(', ')}</h3>
-    <button class="detailsButton">View Details</button>
-    <button class="modelsButton">View Models</button>
-      </div>
-      `
-    appEl.insertAdjacentHTML("beforeend", HTML)
     }
     nameTest = nameTest.toLowerCase().split(" ").join('%20')
     const HTML = `
-    <div data-manufacturer=${nameTest}>
-  <h2>${manufacturer.Mfr_Name} / ${manufacturer.Mfr_CommonName}</h2>
+    <div class="manufacturer-card" data-manufacturer=${nameTest}>
+  <h2>${manufacturer.Mfr_Name || ''} / ${manufacturer.Mfr_CommonName || ''}</h2>
   <h3>${vehicleTypes.join(', ')}</h3>
   <button class="detailsButton">View Details</button>
   <button class="modelsButton">View Models</button>
@@ -119,29 +117,42 @@ function printHTML(data) {
 
   function displayModelsHTML(Results) {
     appEl.textContent = "";
-    Results.forEach((car) => {
-      const HTML = `
-      <h2>${car.Make_Name}</h2>
-      <h3>${car.Model_Name}</h3>
-      `;
-    appEl.insertAdjacentHTML("beforeend", HTML)
-  });
-  }
+    if (Results && Results.length > 0) {
+      Results.forEach((car) => {
+        const HTML = `
+        <div class="model-cards">
+        <h2>${car.Make_Name}</h2>
+        <h3>${car.Model_Name}</h3>
+        </div>
+        `;
+        appEl.insertAdjacentHTML("beforeend", HTML);
+      });
+      }else{
+        const errorHTML = `
+        <div class="error-card">
+        <img src="checkengine.jpg" id="enginelight" alt="A check engine light.">
+        <h2>We've run into an issue...</h2>
+        <h3>You have selected a multi-manufacturer company and/or a subsidary name (ex: JAGUAR LAND ROVER NA, LLC). To find the models you are looking for, try the model search input (ex: Jaguar).</h3>
+        </div>
+        `
+        appEl.insertAdjacentHTML("beforeend", errorHTML)
+      }
+    }
 
   function displayDetailsHTML(Results) {
     appEl.textContent = "";
     Results.forEach(({Mfr_Name, Mfr_CommonName, Country, City, StateProvince, Address, ContactEmail, PrincipalFirstName, PrincipalPosition}) => {
   const manufacturerHTML = `
   <div class="manu-card">
-  <h3>${Mfr_Name}</h3>
-  <h4>${Mfr_CommonName}</h4>
-  <p>Country: ${Country}</p>
-  <p>City: ${City}</p>
-  <p>State/Province: ${StateProvince}
-  <p>Address: ${Address}</p>
-  <p>Contact Email: ${ContactEmail}</p>
-  <p>Primary Operator: ${PrincipalFirstName}</p>
-  <p>Operator Position: ${PrincipalPosition}</p>
+  <h3>${Mfr_Name || 'Unavailable'}</h3>
+  <h4>${Mfr_CommonName || 'Unavailable'}</h4>
+  <p>Country: ${Country || 'Unavailable'}</p>
+  <p>City: ${City || 'Unavailable'}</p>
+  <p>State/Province: ${StateProvince || 'Unavailable'}
+  <p>Address: ${Address || 'Unavailable'}</p>
+  <p>Contact Email: ${ContactEmail || 'Unavailable'}</p>
+  <p>Primary Operator: ${PrincipalFirstName || 'Unavailable'}</p>
+  <p>Operator Position: ${PrincipalPosition || 'Unavailable'}</p>
   </div>`
   /* const manufacturerHTML = `
   <div class="manu-card">
@@ -187,16 +198,25 @@ countrySort.addEventListener("click",() =>{
     return false;
   }
   const countryManufacturers = filterData(manufacturers, (manufacturer) => manufacturer.Country === country.toUpperCase());
-  printHTML(countryManufacturers);
+  printHTML(countryManufacturers, country);
 })
 const manufacturers = await getData(manufacturerURL);
 
-  manuText.addEventListener("click",() =>{
-    const makesURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manuInput}?format=json`;
-    const response = fetch(makesURL)
-    const data = response.json();
-    if(data){
-      response
+manuText.addEventListener("click", async () => {
+  const manufacturerInput = manuInput.value.trim();
+  if(!manufacturerInput) {
+    return false;
+  }
+  const manufacturerSearchURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/${manufacturerInput}?format=json`;
+  try {
+    const response = await fetch(manufacturerSearchURL);
+    const data = await response.json();
+    if (data.Results) {
+      displayModelsHTML(data.Results)
+    }else{
+      console.log('No models found for this manufacturer.')
     }
-
-})
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+});
