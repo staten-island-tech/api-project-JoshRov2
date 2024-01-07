@@ -13,6 +13,12 @@
   background-color: blanchedalmond;
   border: 0.5px solid black;
 }
+#inputs> div{
+  display: inline-block;
+}
+#inputs button{
+  width: 20vw;
+}
 label, input, button{
   text-align: center;
   margin: 1%;
@@ -20,6 +26,7 @@ label, input, button{
 }
 body {
   background-color: lightslategrey;
+  min-height: 100vh;
   color: black;
 }
 button {
@@ -60,6 +67,7 @@ input {
   }
 }
 
+
 input.error {
   border-color: red;
 }
@@ -80,7 +88,7 @@ input.error {
 .manufacturer-card{
   background-color: blanchedalmond;
   width: 20vw;
-  height: 30vh;
+  /* height: 30vh; */
   text-align: center;
   text-wrap: wrap;
   border: 3px solid black;
@@ -129,3 +137,45 @@ input.error {
   box-sizing: border-box;
   border-radius: 3%;
 }
+
+@media screen and (max-width: 1024px) {
+  .manufacturer-card{
+    width: 30vw;
+  }
+  .model-cards{
+    width: 30vw;
+  }
+  .manu-card{
+    width: 30vw;
+  }
+}
+@media screen and (max-width: 768px) {
+  .manufacturer-card{
+    width: 40vw;
+  }
+  .model-cards{
+    width: 40vw;
+  }
+  .manu-card{
+    width: 40vw;
+  }
+  #inputs label{
+    display: block;
+  }
+  button {
+    width: 20vw;
+  }
+}
+@media screen and (max-width: 640px) {
+  .manufacturer-card{
+    width: 50vw;
+  }
+  .model-cards{
+    width: 50vw;
+  }
+  .manu-card{
+    width: 50vw;
+  }
+}
+
+

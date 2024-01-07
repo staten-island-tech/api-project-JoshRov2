@@ -94,7 +94,7 @@ function printHTML(data, countryName) {
     const HTML = `
     <div class="manufacturer-card" data-manufacturer=${nameTest}>
   <h2>${manufacturer.Mfr_Name || ''} / ${manufacturer.Mfr_CommonName || ''}</h2>
-  <h3>${vehicleTypes.join(', ')}</h3>
+  ${vehicleTypes.length ? `<h3>${vehicleTypes.join(', ')}</h3>` : ""}
   <button class="detailsButton">View Details</button>
   <button class="modelsButton">View Models</button>
     </div>
