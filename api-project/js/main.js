@@ -53,8 +53,9 @@ async function carData(URL) {
 };
 carData(MakesURL);
 const maketext = document.getElementById('app');
- */
-import '../css/style.css'
+ */import '../css/style.css'
+
+async function dataBase() {
 
 const manufacturerURL = `https://vpic.nhtsa.dot.gov/api/vehicles/GetAllManufacturers?format=json`;
 const appEl = document.getElementById('app');
@@ -220,3 +221,5 @@ manuText.addEventListener("click", async () => {
     console.error('Error fetching data:', error);
   }
 });
+}
+dataBase();
