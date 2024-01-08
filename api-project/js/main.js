@@ -130,7 +130,7 @@ function printHTML(data, countryName) {
       }else{
         const errorHTML = `
         <div class="error-card">
-        <img src="checkengine.jpg" id="enginelight" alt="A check engine light.">
+        <img src="public/images/checkengine.jpg" id="enginelight" alt="A check engine light.">
         <h2>We've run into an issue...</h2>
         <h3>You have selected a multi-manufacturer company and/or a subsidary name (ex: JAGUAR LAND ROVER NA, LLC). To find the models you are looking for, try the model search input (ex: Jaguar).</h3>
         </div>
