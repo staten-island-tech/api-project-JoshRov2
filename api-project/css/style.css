@@ -28,6 +28,9 @@ body {
   background-color: lightslategrey;
   min-height: 100vh;
   color: black;
+font-family: 'Dancing Script', cursive;
+font-family: 'Outfit', sans-serif;
+font-family: 'Poppins', sans-serif;
 }
 button {
   border-radius: 8px;
