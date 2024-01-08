@@ -199,8 +199,8 @@ countrySort.addEventListener("click",() =>{
   }
   const countryManufacturers = filterData(manufacturers, (manufacturer) => manufacturer.Country === country.toUpperCase());
   printHTML(countryManufacturers, country);
-})
-const manufacturers = await getData(manufacturerURL);
+});
+const manufacturers = getData(manufacturerURL);
 
 manuText.addEventListener("click", async () => {
   const manufacturerInput = manuInput.value.trim();
